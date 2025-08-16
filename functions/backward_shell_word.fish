@@ -33,18 +33,6 @@ function __token_starts_core --description 'Compute token start indices from buf
         # Fallback search
         set -l patt (string escape --style=regex -- $tok)
         set -l tail (string sub -s $i -- $buf)
-        # set -l rel (string match -r -n -- $patt -- $tail)
-
-        # if test -n "$rel"
-        #     set -l indexes (string split ' ' -- $rel)
-        #     set -l start_idx $indexes[1]
-        #     set -l start (math $i + $start_idx - 1)
-        #     set -a starts $start
-        #     set i (math $start + $L)
-        # else
-        #     set -a starts $i
-        #     set i (math $i + $L)
-        # end
         set -l rel (string match -r -n -- $patt -- $tail)
 
         if test -n "$rel"
@@ -113,8 +101,6 @@ function __backward_shell_word_pos_core --description 'Compute target index usin
         return
     end
 
-    echo "$buf: $starts" >> /tmp/starts.txt
-
     set -l target_start 1
     for idx in (seq 1 (count $toks))
         set -l s $starts[$idx]
@@ -144,7 +130,7 @@ end
 
 # Live version: pulls buf/cursor/tokens from the real commandline
 # and moves the cursor in-place
-function backward_shell_word --description 'Jump to start of current/prev token (live)'
+function backward_shell_word --description 'Jump to start of current/prev token'
     set -l buf (commandline)
     set -l cur (commandline -C)
     set -l toks (commandline --tokens-raw)
