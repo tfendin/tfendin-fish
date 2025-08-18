@@ -198,7 +198,10 @@ test_case "a b c d e" 0 0        # start → stays
 echo ""
 if test $__passed_tests -eq $__total_tests
     echo -n "🎉"
+    set -g exit_code 0
 else
     echo -n "❌"
+    set -g exit_code 1
 end
 echo " Final Summary: $__passed_tests of $__total_tests tests passed"
+exit $exit_code
