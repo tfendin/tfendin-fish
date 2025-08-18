@@ -1,53 +1,6 @@
 #!/usr/bin/env fish
 source (status dirname)/../functions/backward_shell_word.fish
-
-function show_cursor --argument-names input pos
-    echo "$input"
-    set -l padding (string repeat -n (math $pos - 1) "~")
-    echo "$padding^"
-end
-
-set -g __total_tests 0
-set -g __passed_tests 0
-
-function tokens_from_string --description 'Split a string into tokens, preserving simple quoted strings'
-    set -l str $argv
-    set -l tokens
-    set -l current ''
-    set -l inquote ''
-
-    for word in (string split ' ' -- $str)
-        if test -n "$inquote"
-            set current "$current $word"
-            if string match -q "*$inquote" "$word"
-                set tokens $tokens $current
-                set current ''
-                set inquote ''
-            end
-        else
-            if string match -q "'*" -- "$word"; or string match -q '"*' -- "$word"
-                # starting a quote
-                set inquote (string sub -s 1 -l 1 $word)
-                if string match -q "*$inquote" "$word" && test (string length -- $word) -gt 1
-                    # quote starts and ends in same word
-                    set tokens $tokens $word
-                    set inquote ''
-                else
-                    set current $word
-                end
-            else
-                set tokens $tokens $word
-            end
-        end
-    end
-
-    # If we ended still in quotes, push the unfinished token (best‑effort)
-    if test -n "$current"
-        set tokens $tokens $current
-    end
-
-    printf "%s\n" $tokens
-end
+source (status dirname)/test_helper.fish
 
 function test_case --description 'Run one test case against __backward_shell_word_pos_core with 0-based indexes'
     set -g __total_tests (math $__total_tests + 1)
@@ -58,12 +11,6 @@ function test_case --description 'Run one test case against __backward_shell_wor
 
     # Simulate tokenization
     set -l toks (tokens_from_string $cmdline)
-
-    # echo "Tokens:"
-    # for token in $toks
-    #     echo $token
-    # end
-    # echo "End of tokens"
 
     # Convert to 1-based before calling the core
     set -l cursor1 (math $cursor0 + 1)
@@ -194,17 +141,3 @@ test_case "a b c d e" 8 6
 test_case "a b c d e" 6 4        # at 'd' → start of 'c'
 test_case "a b c d e" 4 2        # space → start of 'b'
 test_case "a b c d e" 0 0        # start → stays
-
-# -------------------------
-# Final summary
-# -------------------------
-echo ""
-if test $__passed_tests -eq $__total_tests
-    echo -n "🎉"
-    set -g exit_code 0
-else
-    echo -n "❌"
-    set -g exit_code 1
-end
-echo " Final Summary: $__passed_tests of $__total_tests tests passed"
-exit $exit_code
