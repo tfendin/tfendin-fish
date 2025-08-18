@@ -1,4 +1,6 @@
 
+set -a fish_function_path (status dirname)/../functions
+
 set -g __total_tests 0
 set -g __passed_tests 0
 
