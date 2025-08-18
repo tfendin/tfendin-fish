@@ -41,7 +41,7 @@ function tokens_from_string --description 'Split a string into tokens, preservin
         if test -n "$inquote"
             set current "$current $word"
             if string match -q "*$inquote" "$word"
-                set tokens $tokens $current
+                set -a tokens $current
                 set current ''
                 set inquote ''
             end
@@ -51,13 +51,13 @@ function tokens_from_string --description 'Split a string into tokens, preservin
                 set inquote (string sub -s 1 -l 1 $word)
                 if string match -q "*$inquote" "$word" && test (string length -- $word) -gt 1
                     # quote starts and ends in same word
-                    set tokens $tokens $word
+                    set -a tokens $word
                     set inquote ''
                 else
                     set current $word
                 end
             else
-                set tokens $tokens $word
+                set -a tokens $word
             end
         end
     end

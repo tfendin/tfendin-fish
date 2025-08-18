@@ -12,13 +12,13 @@ jobs:
       matrix:
         script:
           - tests/test_backward_shell_word.fish
+          - tests/test_forward_shell_word.fish
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
       - name: Install fish
         run: |
-          sudo apt-get update
           sudo apt-get install -y fish
 
       - run: ${{ matrix.script }}
