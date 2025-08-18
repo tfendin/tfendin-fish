@@ -1,5 +1,5 @@
 #!/usr/bin/env fish
-source ../functions/backward_shell_word.fish
+source (status dirname)/../functions/backward_shell_word.fish
 
 function show_cursor --argument-names input pos
     echo "$input"
