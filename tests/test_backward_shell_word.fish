@@ -35,7 +35,6 @@ end
 # -------------------------
 
 # echo aba bab tab foo bar
-#set fish_trace 1
 test_case "echo aba bab tab foo bar" 24 21   # inside 'bar' → start of 'bar'
 test_case "echo aba bab tab foo bar" 21 17   # at start of 'bar' → start of 'foo'
 test_case "echo aba bab tab foo bar" 19 17   # inside 'foo' → start of 'foo'

@@ -2,43 +2,6 @@
 source (status dirname)/../functions/forward_shell_word.fish
 source (status dirname)/test_helper.fish
 
-
-function tokens_from_string --description 'Split a string into tokens, preserving simple quoted strings'
-    set -l str $argv
-    set -l tokens
-    set -l current ''
-    set -l inquote ''
-
-    for word in (string split ' ' -- $str)
-        if test -n "$inquote"
-            set current "$current $word"
-            if string match -q "*$inquote" "$word"
-                set tokens $tokens $current
-                set current ''
-                set inquote ''
-            end
-        else
-            if string match -q "'*" -- "$word"; or string match -q '"*' -- "$word"
-                set inquote (string sub -s 1 -l 1 $word)
-                if string match -q "*$inquote" "$word" && test (string length -- $word) -gt 1
-                    set tokens $tokens $word
-                    set inquote ''
-                else
-                    set current $word
-                end
-            else
-                set tokens $tokens $word
-            end
-        end
-    end
-
-    if test -n "$current"
-        set tokens $tokens $current
-    end
-
-    printf "%s\n" $tokens
-end
-
 function test_case --description 'Run one test case against __forward_shell_word_pos_core with 0-based indexes'
     account_test
     set -l cmdline   $argv[1]
