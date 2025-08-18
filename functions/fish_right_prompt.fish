@@ -1,3 +1,3 @@
 function fish_right_prompt
-     date "+%H:%M"
+     date '+%b %d %H:%M'
 end
