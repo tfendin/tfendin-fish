@@ -8,17 +8,15 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        script:
-          - tests/test_backward_shell_word.fish
-          - tests/test_forward_shell_word.fish
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
       - name: Install fish
-        run: |
-          sudo apt-get install -y fish
+        run: sudo apt-get install -y fish
 
-      - run: ${{ matrix.script }}
+      - name: Test backward_shell_word
+        run: tests/test_backward_shell_word.fish
+
+      - name: Test forward_shell_word
+        run: tests/test_forward_shell_word.fish
