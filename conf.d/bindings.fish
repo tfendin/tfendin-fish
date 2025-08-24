@@ -2,8 +2,8 @@ if status is-interactive
     #
     # Standard functions
     #
-    bind \cp history-prefix-search-backward
-    bind \cn history-prefix-search-forward
+    bind ctrl-p history-prefix-search-backward
+    bind ctrl-n history-prefix-search-forward
 
     bind ctrl-alt-h backward-kill-word
 
