@@ -28,7 +28,7 @@ function fish_prompt --description 'Write out the prompt'
 
 
     echo -ns                                                      \
-        (prompt_login)' '                                         \
+        (__prompt_login_with_shortened_me)' '                     \
         (set_color $color_cwd)                                    \
         (prompt_pwd)                                              \
         $normal                                                   \
@@ -37,6 +37,15 @@ function fish_prompt --description 'Write out the prompt'
         $prompt_status                                            \
         $suffix " "
 end
+
+function __prompt_login_with_shortened_me
+    set -l prompt_user "$USER"
+    if set -q prompt_user_me; and string match -q "$prompt_user" "$prompt_user_me"
+        set prompt_user "me"
+    end
+    USER=$prompt_user prompt_login
+end
+
 
 function __prompt_dirstack
     set -l stack_size (count $dirstack)
