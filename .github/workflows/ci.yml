@@ -12,11 +12,41 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install fish
-        run: sudo apt-get install -y fish
+      # --- Latest fish ---
+      - name: Install latest fish
+        uses: fish-shop/install-fish-shell@v1
+        with:
+          version: latest
 
-      - name: Test backward_shell_word
+      - name: Verify fish version
+        run: fish --version
+
+      - name: Test backward_shell_word (latest)
         run: tests/test_backward_shell_word.fish
+        shell: fish {0}
 
-      - name: Test forward_shell_word
+      - name: Test forward_shell_word (latest)
         run: tests/test_forward_shell_word.fish
+        shell: fish {0}
+
+      # Downgrade to 3.3.1
+      - name: Install fish 3.3.1
+        run: |
+          sudo apt-get remove -y fish
+          wget https://launchpad.net/~fish-shell/+archive/ubuntu/release-3/+files/fish_3.3.1-1~focal_amd64.deb
+          sudo apt-get install -y ./fish_3.3.1-1~focal_amd64.deb
+
+      - name: Verify fish version
+        run: |
+          set -ex
+          fish --version
+          fish --version|grep -Fq 'fish, version 3.3'
+
+      - name: Test backward_shell_word (3.3.1)
+        run: tests/test_backward_shell_word.fish
+        shell: fish {0}
+
+      - name: Test forward_shell_word (3.3.1)
+        run: tests/test_forward_shell_word.fish
+        shell: fish {0}
+
