@@ -17,13 +17,14 @@ function fish_prompt --description 'Write out the prompt'
 
     # Write pipestatus
     set -q __fish_prompt_status_generation; or set -g __fish_prompt_status_generation $status_generation
+    set -l prompt_status
     if test $__fish_prompt_status_generation != $status_generation
         set __fish_prompt_status_generation $status_generation
         set -l status_color (set_color $fish_color_status)
         set -l statusb_color (set_color --bold $fish_color_status)
-        set -l prompt_status " " (__fish_print_pipestatus "[" "]" "|" "$status_color" "$statusb_color" $last_pipestatus)
+        set prompt_status " "(__fish_print_pipestatus "[" "]" "|" "$status_color" "$statusb_color" $last_pipestatus)
     else
-        set -l prompt_status ""
+        set prompt_status ""
     end
 
 
@@ -35,7 +36,7 @@ function fish_prompt --description 'Write out the prompt'
         (__prompt_dirstack)                                       \
         (fish_vcs_prompt)                                         \
         $prompt_status                                            \
-        $suffix " "
+        " $suffix "
 end
 
 function __prompt_login_with_shortened_me
