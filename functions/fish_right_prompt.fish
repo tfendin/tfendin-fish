@@ -1,3 +1,5 @@
 function fish_right_prompt
-     date '+%b %d %H:%M'
+    if test "$right_prompt_hidden" != "true"
+        date '+%b %d %H:%M'
+    end
 end
