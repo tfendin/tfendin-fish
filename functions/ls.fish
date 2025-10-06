@@ -1,4 +1,4 @@
-function ls --description 'My incarnation of ls'
+function ls --description 'My incarnation of ls' --wraps ls
     argparse --ignore-unknown 'a/all' 'A/almost-all' -- $argv
 
     set -l args --color=never --group-directories-first --classify
