@@ -15,6 +15,12 @@ function fish_prompt --description 'Write out the prompt'
         set suffix '#'
     end
 
+    if set -q fish_prompt_linebreak; and test "$fish_prompt_linebreak" = 1
+        printf '\n' | read -zl nl
+        set suffix $nl$suffix
+    end
+
+
     # Write pipestatus
     set -q __fish_prompt_status_generation; or set -g __fish_prompt_status_generation $status_generation
     set -l prompt_status
@@ -28,7 +34,7 @@ function fish_prompt --description 'Write out the prompt'
     end
 
 
-    echo -ns                                                      \
+    echo -ens                                                     \
         (__prompt_login_with_shortened_me)' '                     \
         (set_color $color_cwd)                                    \
         (prompt_pwd)                                              \
@@ -46,7 +52,6 @@ function __prompt_login_with_shortened_me
     end
     USER=$prompt_user prompt_login
 end
-
 
 function __prompt_dirstack
     set -l stack_size (count $dirstack)
