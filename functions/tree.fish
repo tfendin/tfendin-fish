@@ -1,4 +1,4 @@
-function tree
+function tree --wraps tree
     argparse --ignore-unknown 'a' -- $argv
 
     set -l args 
